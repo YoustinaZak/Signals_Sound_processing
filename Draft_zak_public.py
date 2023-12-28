@@ -61,7 +61,7 @@ audio = High_pass_filter(2500,5,SR,audio)
 pfreq, mag = fourier_transform(audio)
 plt_freq_domain(pfreq,mag)
 
-audio = Low_pass_filter(5000,5,SR,audio)
+audio = Low_pass_filter(5000,1,SR,audio)
 pfreq, mag = fourier_transform(audio)
 plt_freq_domain(pfreq,mag)
 plt_freq_domain(pfreq,mag)
