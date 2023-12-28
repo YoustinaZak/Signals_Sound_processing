@@ -41,7 +41,9 @@ def plt_freq_domain(positive_freq,magnitude):
     plt.ylabel('Magnitude')
     plt.grid()
     plt.show()
-#plt_freq_domain(positive_freq,magnitude)
+    
+plt_freq_domain(positive_freq,magnitude)
+
 def Low_pass_filter(cut_freq,order,sampleRate,audioData):#eliminates high freq
     nyquist = 0.5 * sampleRate
     normal_cutf = cut_freq / nyquist
@@ -56,9 +58,12 @@ def High_pass_filter(cut_freq,order,sampleRate,audioData):#eliminates low freq
     y = filtfilt (b,a, audioData)
     return y
 audio = High_pass_filter(2500,5,SR,audio)
-audio = Low_pass_filter(5000,5,SR,audio)
-#plt_time_domain_before(SR,filtered_audio_lowp)
 pfreq, mag = fourier_transform(audio)
+plt_freq_domain(pfreq,mag)
+
+audio = Low_pass_filter(5000,5,SR,audio)
+pfreq, mag = fourier_transform(audio)
+plt_freq_domain(pfreq,mag)
 plt_freq_domain(pfreq,mag)
 #function of saving new audio
 #audio_new = wave.open("","wb")
