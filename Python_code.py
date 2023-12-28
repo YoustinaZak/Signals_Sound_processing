@@ -64,8 +64,8 @@ def save_file():
 if __name__ == "__main__":
     audioFile = "place_your_file_name"
     sampleRate, audioData = read_file(audioFile)
-    if audio.ndim > 1:  #audio is stereo
-        audio=audio[:,0]
+    if audioData.ndim > 1:  #audio is stereo
+        audio=audioData[:,0]
     plt_time_domain_before(sampleRate, audioData)
     fourier_transform()
     plt_freq_domain_before()
