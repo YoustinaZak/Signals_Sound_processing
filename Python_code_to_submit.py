@@ -83,15 +83,6 @@ def normalize_audio(audio_data):
     return audio_data_normalized
 
 
-def float_to_pcm16(audio_data):
-    # Clip the audio data to the range of [-1, 1)
-    audio_data = np.clip(audio_data, -1.0, 1.0 - np.finfo(np.float16).eps)
-
-    # Scale the data to the range of a 16-bit integer
-    pcm_data = np.int16(audio_data * 32767)
-    return pcm_data
-
-
 ############################################################
 
 if __name__ == "__main__":
@@ -114,10 +105,6 @@ if __name__ == "__main__":
     plt_freq_domain(positiveFreq, magnitude, 'freq domain after band-pass filter')
 
     audioNormalized = normalize_audio(audioData)
-
-    # removing floating points
-    pcmAudio = float_to_pcm16(audioNormalized)
-    plt_time_domain(sampleRate, pcmAudio, 'Time Domain Representation after editing')
 
     # Save to a new file
     output_file_path = "Modified_Audio.wav"  # Change this to your desired output filename
