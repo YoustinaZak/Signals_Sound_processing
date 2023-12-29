@@ -71,7 +71,7 @@ def high_pass_filter(cut_freq, order, sample_rate, audio_data):
 
 
 def save_audio_to_file(file_path, sample_rate, audio_data):
-    wavfile.write(file_path, sample_rate, audio_data)
+    wavfile.write(file_path, sample_rate, np.asarray(audio_data, dtype=np.int16))
 
 
 def normalize_audio(audio_data):
