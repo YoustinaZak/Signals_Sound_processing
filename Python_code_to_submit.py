@@ -95,7 +95,7 @@ def float_to_pcm16(audio_data):
 ############################################################
 
 if __name__ == "__main__":
-    audioFile = "trial.wav"
+    audioFile = "Trial.wav"
     sampleRate, audioData = read_file(audioFile)
 
     # Convert stereo audio to mono if it's stereo
@@ -121,4 +121,4 @@ if __name__ == "__main__":
 
     # Save to a new file
     output_file_path = "Modified_Audio.wav"  # Change this to your desired output filename
-    save_audio_to_file(output_file_path, sampleRate, pcmAudio)
+    save_audio_to_file(output_file_path, sampleRate,audioData)
