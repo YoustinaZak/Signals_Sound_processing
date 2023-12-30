@@ -57,6 +57,9 @@ def High_pass_filter(cut_freq,order,sampleRate,audioData):#eliminates low freq
     b, a = butter(order, normal_cutf, btype='High', analog=False)
     y = filtfilt (b,a, audioData)
     return y
+
+
+
 audio = High_pass_filter(2500,5,SR,audio)
 pfreq, mag = fourier_transform(audio)
 plt_freq_domain(pfreq,mag)
