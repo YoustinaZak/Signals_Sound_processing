@@ -49,7 +49,7 @@ def perform_fourier_transform(audio_data, sample_rate):
     frequencies = np.fft.fftfreq(len(fft_result), 1 / sample_rate)
     positive_freq = frequencies[:len(frequencies) // 2]
     magnitude = np.abs(fft_result)[:len(frequencies) // 2]
-    phase = np.angle(fft_result)
+    phase = np.angle(fft_result)[:len(frequencies) // 2]
     return positive_freq, magnitude, phase
 
 
