@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 from scipy.io import wavfile
 from scipy.signal import butter, filtfilt
-
+from scipy.fftpack import fft, fftfreq, ifft
 
 # function of accessing (reading) the audio file
 def read_file(f_name):
@@ -107,7 +107,7 @@ if __name__ == "__main__":
     positiveFreq, magnitude, phase = perform_fourier_transform(audioData, sampleRate)
     plt_freq_domain(positiveFreq, magnitude, 'freq domain before editing')
 
-    magnitude = band_filter_in_frequency(magnitude,0,20000)
+    magnitude = band_filter_in_frequency(magnitude,8000,20000)
     # # Applying high-pass filter
     # audioData = high_pass_filter(6000, 5, sampleRate, audioData)
     # # Applying low-pass filter
@@ -115,9 +115,10 @@ if __name__ == "__main__":
 
     #positiveFreq, magnitude = perform_fourier_transform(audioData, sampleRate)
     plt_freq_domain(positiveFreq, magnitude, 'freq domain after band-pass filter')
-    audioData = preform_inverse_fourier_transform(magnitude,phase)
+    #audioData = preform_inverse_fourier_transform(magnitude,phase)
+    audioData = ifft(magnitude).real
     plt_time_domain(sampleRate, audioData, 'Time Domain Representation after band-pass filter')
-
+    print(audioData[1000:2000])
     #audioNormalized = normalize_audio(audioData)
 
     # Save to a new file
