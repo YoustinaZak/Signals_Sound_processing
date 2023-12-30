@@ -82,11 +82,17 @@ def normalize_audio(audio_data):
         audio_data_normalized = audio_data
     return audio_data_normalized
 
+def band_filter_in_frequency (magnitude , cuttoff_low,cuttoff_high ):
+    smpls = len(magnitude)
+    mask = np.zeros(smpls)
+    mask[int((cuttoff_low/24000)* smpls): int((cuttoff_high/24000)* smpls)] = 1
+    magnitude = magnitude * mask
+    return magnitude
 
 ############################################################
 
 if __name__ == "__main__":
-    audioFile = "Trial.wav"
+    audioFile = "5000 Hz Test Tone.wav"
     sampleRate, audioData = read_file(audioFile)
 
     # Convert stereo audio to mono if it's stereo
@@ -96,13 +102,15 @@ if __name__ == "__main__":
     positiveFreq, magnitude = perform_fourier_transform(audioData, sampleRate)
     plt_freq_domain(positiveFreq, magnitude, 'freq domain before editing')
 
+    #magnitude = band_filter_in_frequency(magnitude,7000,20000)
     # Applying high-pass filter
-    audioData = high_pass_filter(200, 5, sampleRate, audioData)
+    audioData = high_pass_filter(6000, 5, sampleRate, audioData)
     # Applying low-pass filter
     audioData = low_pass_filter(8000, 5, sampleRate, audioData)
 
     positiveFreq, magnitude = perform_fourier_transform(audioData, sampleRate)
     plt_freq_domain(positiveFreq, magnitude, 'freq domain after band-pass filter')
+    plt_time_domain(sampleRate, audioData, 'Time Domain Representation after band-pass filter')
 
     audioNormalized = normalize_audio(audioData)
 
