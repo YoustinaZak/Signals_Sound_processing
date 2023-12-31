@@ -46,10 +46,9 @@ def plt_freq_domain(positive_freq, magnitude, title):
 def perform_fourier_transform(audio_data, sample_rate):
     fft_result = np.fft.fft(audio_data)
     frequencies = np.fft.fftfreq(len(fft_result), 1 / sample_rate)
-    positive_freq = frequencies
     magnitude = np.abs(fft_result)
     phase = np.angle(fft_result)
-    return positive_freq, magnitude, phase
+    return frequencies, magnitude, phase
 
 
 # apply filter lowpass and high pass filter
@@ -101,7 +100,7 @@ def low_pass_filter_in_frequency(magnitude, cuttoff_high=24000):
     magnitude = magnitude * mask
     magnitude = np.concatenate((magnitude, magnitude[::-1]))
     return magnitude
-def low_pass_filter_in_frequency(magnitude, cuttoff_low=0):
+def High_pass_filter_in_frequency(magnitude, cuttoff_low=0):
     magnitude = magnitude[:len(magnitude) // 2]
     smpls = len(magnitude)
     mask = np.zeros(smpls)
@@ -125,16 +124,14 @@ if __name__ == "__main__":
     audioData = convert_stereo_to_mono(audioData)
 
     plt_time_domain(sampleRate, audioData, 'Time Domain Representation Before editing')
-    positiveFreq, magnitude, phase = perform_fourier_transform(audioData, sampleRate)
-    plt_freq_domain(positiveFreq, magnitude, 'freq domain before editing')
+    frequency, magnitude, phase = perform_fourier_transform(audioData, sampleRate)
+    plt_freq_domain(frequency, magnitude, 'freq domain before editing')
 
     magnitude = band_filter_in_frequency(magnitude, cuttoff_low=100, cuttoff_high=10000)
     audioData =preform_inverse_fourier_transform(magnitude, phase)
 
     plt_freq_domain(positiveFreq, magnitude, 'freq domain after band-pass filter')
     plt_time_domain(sampleRate, audioData, 'Time Domain Representation after band-pass filter')
-
-    audioNormalized = normalize_audio(audioData)
 
     # Save to a new file
     output_file_path = "new2.wav"  # Change this to your desired output filename
