@@ -82,34 +82,54 @@ def normalize_audio(audio_data):
         audio_data_normalized = audio_data
     return audio_data_normalized
 
-def band_filter_in_frequency (magnitude , cuttoff_low,cuttoff_high ):
-    magnitude= magnitude [:len(magnitude)//2]
+
+def band_filter_in_frequency(magnitude, cuttoff_low=0, cuttoff_high=24000):
+    magnitude = magnitude[:len(magnitude) // 2]
     smpls = len(magnitude)
     mask = np.zeros(smpls)
-    mask[int((cuttoff_low/24000)* smpls): int((cuttoff_high/24000)* smpls)] = 1
-    magnitude=magnitude*mask
+    mask[int((cuttoff_low / 24000) * smpls): int((cuttoff_high / 24000) * smpls)] = 1
+    magnitude = magnitude * mask
     magnitude = np.concatenate((magnitude, magnitude[::-1]))
     return magnitude
-    
-def preform_inverse_fourier_transform (magnitude, phase):
+
+#division the band pass to low and high filters
+def low_pass_filter_in_frequency(magnitude, cuttoff_high=24000):
+    magnitude = magnitude[:len(magnitude) // 2]
+    smpls = len(magnitude)
+    mask = np.zeros(smpls)
+    mask[: int((cuttoff_high / 24000) * smpls)] = 1
+    magnitude = magnitude * mask
+    magnitude = np.concatenate((magnitude, magnitude[::-1]))
+    return magnitude
+def low_pass_filter_in_frequency(magnitude, cuttoff_low=0):
+    magnitude = magnitude[:len(magnitude) // 2]
+    smpls = len(magnitude)
+    mask = np.zeros(smpls)
+    mask[int((cuttoff_low / 24000) * smpls): ] = 1
+    magnitude = magnitude * mask
+    magnitude = np.concatenate((magnitude, magnitude[::-1]))
+    return magnitude
+
+
+def preform_inverse_fourier_transform(magnitude, phase):
     filtered = magnitude * np.exp(1j * phase)
     time_domain_signal = np.fft.ifft(filtered)
     return np.real(time_domain_signal)
 ############################################################
 
 if __name__ == "__main__":
-    audioFile = "Recording.wav"
+    audioFile = "tst.wav"
     sampleRate, audioData = read_file(audioFile)
 
     # Convert stereo audio to mono if it's stereo
     audioData = convert_stereo_to_mono(audioData)
 
-    #plt_time_domain(sampleRate, audioData, 'Time Domain Representation Before editing')
+    plt_time_domain(sampleRate, audioData, 'Time Domain Representation Before editing')
     positiveFreq, magnitude, phase = perform_fourier_transform(audioData, sampleRate)
     plt_freq_domain(positiveFreq, magnitude, 'freq domain before editing')
 
-    magnitude = band_filter_in_frequency(magnitude,5000,10000)
-    audioData =preform_inverse_fourier_transform(magnitude,phase)
+    magnitude = band_filter_in_frequency(magnitude, cuttoff_low=100, cuttoff_high=10000)
+    audioData =preform_inverse_fourier_transform(magnitude, phase)
 
     plt_freq_domain(positiveFreq, magnitude, 'freq domain after band-pass filter')
     plt_time_domain(sampleRate, audioData, 'Time Domain Representation after band-pass filter')
@@ -118,6 +138,4 @@ if __name__ == "__main__":
 
     # Save to a new file
     output_file_path = "new2.wav"  # Change this to your desired output filename
-    save_audio_to_file(output_file_path, sampleRate,audioData)
-
-    
+    save_audio_to_file(output_file_path, sampleRate, audioData)
