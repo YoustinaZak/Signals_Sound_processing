@@ -84,10 +84,12 @@ def normalize_audio(audio_data):
     return audio_data_normalized
 
 def band_filter_in_frequency (magnitude , cuttoff_low,cuttoff_high ):
+    magnitude= magnitude [:len(magnitude)//2]
     smpls = len(magnitude)
     mask = np.zeros(smpls)
     mask[int((cuttoff_low/24000)* smpls): int((cuttoff_high/24000)* smpls)] = 1
-    magnitude = magnitude * mask
+    magnitude=magnitude*mask
+    magnitude = np.concatenate((magnitude, magnitude[::-1]))
     return magnitude
     
 def preform_inverse_fourier_transform (magnitude, phase):
