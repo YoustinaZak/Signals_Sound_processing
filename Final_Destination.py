@@ -102,7 +102,9 @@ if __name__ == "__main__":
     frequency, magnitude, phase = perform_fourier_transform(audioData, sampleRate)
     plt_freq_domain(frequency, magnitude, 'freq domain before editing')
 
-    magnitude = band_filter_in_frequency(magnitude, cuttoff_low=200, cuttoff_high=10000)
+    #magnitude = band_filter_in_frequency(magnitude, cuttoff_low=200, cuttoff_high=10000)
+    magnitude = low_pass_filter_in_frequency(magnitude,10000)
+    magnitude= High_pass_filter_in_frequency(magnitude,200)
     audioData =preform_inverse_fourier_transform(magnitude, phase)
 
     plt_freq_domain(frequency, magnitude, 'freq domain after band-pass filter')
