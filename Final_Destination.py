@@ -51,35 +51,8 @@ def perform_fourier_transform(audio_data, sample_rate):
     return frequencies, magnitude, phase
 
 
-# apply filter lowpass and high pass filter
-def low_pass_filter(cut_freq, order, sample_rate, audio_data):
-    nyquist = 0.5 * sample_rate
-    normal_cutoff = cut_freq / nyquist
-    b, a = butter(order, normal_cutoff, btype='low', analog=False)
-    filtered_audio = filtfilt(b, a, audio_data)
-    return filtered_audio
-
-
-# Function for high-pass filtering
-def high_pass_filter(cut_freq, order, sample_rate, audio_data):
-    nyquist = 0.5 * sample_rate
-    normal_cutoff = cut_freq / nyquist
-    b, a = butter(order, normal_cutoff, btype='high', analog=False)
-    filtered_audio = filtfilt(b, a, audio_data)
-    return filtered_audio
-
-
 def save_audio_to_file(file_path, sample_rate, audio_data):
     wavfile.write(file_path, sample_rate, np.asarray(audio_data, dtype=np.int16))
-
-
-def normalize_audio(audio_data):
-    max_val = np.max(np.abs(audio_data))
-    if max_val > 1.0:
-        audio_data_normalized = audio_data / max_val
-    else:
-        audio_data_normalized = audio_data
-    return audio_data_normalized
 
 
 def band_filter_in_frequency(magnitude, cuttoff_low=0, cuttoff_high=24000):
