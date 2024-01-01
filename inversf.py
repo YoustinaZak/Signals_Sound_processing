@@ -97,20 +97,18 @@ def band_filter_in_frequency(magnitude, cuttoff_low=0, cuttoff_high=24000):
 
 #division the band pass to low and high filters
 def low_pass_filter_in_frequency(magnitude, cuttoff_high=24000):
-    magnitude = magnitude[:len(magnitude) // 2]
     smpls = len(magnitude)
     mask = np.zeros(smpls)
-    mask[: int((cuttoff_high / 24000) * smpls)] = 1
+    mask[: int((cuttoff_high / 48000) * smpls)] = 1
+    mask[smpls - int((cuttoff_high / 48000) * smpls):] = 1
     magnitude = magnitude * mask
-    magnitude = np.concatenate((magnitude, magnitude[::-1]))
     return magnitude
+
 def High_pass_filter_in_frequency(magnitude, cuttoff_low=0):
-    magnitude = magnitude[:len(magnitude) // 2]
     smpls = len(magnitude)
     mask = np.zeros(smpls)
-    mask[int((cuttoff_low / 24000) * smpls): ] = 1
+    mask[int((cuttoff_low / 48000) * smpls): smpls - int((cuttoff_low / 48000) * smpls)] = 1
     magnitude = magnitude * mask
-    magnitude = np.concatenate((magnitude, magnitude[::-1]))
     return magnitude
 
 
